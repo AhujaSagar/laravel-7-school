@@ -12,7 +12,7 @@
               <li>{{ $error }}</li>
             @endforeach
         </ul>
-      </div><br />
+      </div><br/>
     @endif
       <form method="post" action="{{ route('course.store') }}">
           @csrf
@@ -34,9 +34,9 @@
               <label for="fees">Fees:</label>
               <input type="number" class="form-control" name="fees"/>
           </div>                 
-          <button type="submit" class="btn btn-primary-outline">Add course</button>
+          <button type="submit" class="btn btn-primary">Add course</button>
       </form>
   </div>
 </div>
-</div>
+
 @endsection

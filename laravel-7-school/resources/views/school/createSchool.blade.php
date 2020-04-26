@@ -38,9 +38,9 @@
               <label for="trustee">Trustee:</label>
               <input type="text" class="form-control" name="trustee"/>
           </div>                      
-          <button type="submit" class="btn btn-primary-outline">Add School</button>
+          <button type="submit" class="btn btn-primary">Add School</button>
       </form>
   </div>
 </div>
-</div>
+
 @endsection

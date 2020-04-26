@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\schoolInfo;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,10 @@ Route::resource('courses_offered', 'CoursesOfferedController');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::any('/search',function(){
+    $q = Request::get ( 'q' );
+    $school = schoolInfo::where('name','LIKE','%'.$q.'%')->get();
+    if(count($school) > 0)
+        return view('school.index')->withDetails($school)->withQuery ( $q );
+    else return view ('school.index')->withMessage('No Details found. Try to search again !');
+});

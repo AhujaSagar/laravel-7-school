@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\courses_offered;
+use DB;
 
 class CoursesOfferedController extends Controller
 {
@@ -13,7 +15,9 @@ class CoursesOfferedController extends Controller
      */
     public function index()
     {
-        //
+        $enroll= new courses_offered();
+        $result=$enroll->show();
+        return view('courses_offered.index',compact('result'));
     }
 
     /**
@@ -23,7 +27,7 @@ class CoursesOfferedController extends Controller
      */
     public function create()
     {
-        //
+        return view('courses_offered.create');
     }
 
     /**
@@ -34,51 +38,10 @@ class CoursesOfferedController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $enroll= new courses_offered();
+        $school=$request->get('school');
+        $course=$request->get('course');
+        $enroll->addCourses($school,$course);
+        return redirect('/courses_offered')->with('success', 'Course added!');    
     }
 }

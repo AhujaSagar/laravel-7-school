@@ -14,7 +14,8 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        $course= coursesInfo::all();
+        $courseModel= new coursesInfo();
+        $course=$courseModel->show();
         return view('course.index',compact('course'));
     }
 
@@ -44,12 +45,13 @@ class CoursesController extends Controller
         ]);
 
         $course = new coursesInfo([
-            'name' => $request->get('name'),
-            'duration' => $request->get('duration'),
-            'professor' => $request->get('professor'),
-            'fees' => $request->get('fees'),
+            $name = $request->get('name'),
+            $duration = $request->get('duration'),
+            $professor = $request->get('professor'),
+            $fees = $request->get('fees'),
         ]);
-        $course->save();
+        $courseModel= new coursesInfo();
+        $course=$courseModel->addCourse($name,$duration,$professor,$fees);
         return redirect('/course')->with('success', 'course added!');
  
     }
@@ -62,7 +64,9 @@ class CoursesController extends Controller
      */
     public function show($id)
     {
-        //
+        $courseModel= new coursesInfo();
+        $course=$courseModel->display($id);
+        return view('course.show',compact('course'));
     }
 
     /**
@@ -73,7 +77,8 @@ class CoursesController extends Controller
      */
     public function edit($id)
     {
-        $course = coursesInfo::find($id);
+        $courseModel= new coursesInfo();
+        $course=$courseModel->change($id);
         return view('course.edit', compact('course'));
     }
 
@@ -86,31 +91,9 @@ class CoursesController extends Controller
      */
     public function update(Request $request, $id)
     {
-       $request->validate([
-
-        ]);
-        $i=0;
-        $course = coursesInfo::find($id);
-        if($request->get('name')!=""){
-        $course->name = $request->get('name');
-        $i++;
-        }
-        if($request->get('duration')!=""){
-        $course->duration = $request->get('duration');
-        $i++;
-        }
-        if($request->get('professor')!=""){
-        $course->professor = $request->get('professor');
-        $i++;
-        }
-        if($request->get('fees')!=""){
-        $course->fees = $request->get('fees');
-        $i++;
-        }
-        $course->save();
-
-        return redirect('/course')->with('success', strval($i).' values updated!');
-   
+        $courseModel= new coursesInfo();
+        $course=$courseModel->upgrade($request, $id);    
+        return redirect('/course')->with('success', 'Course updated!');
     }
 
     /**
@@ -121,9 +104,8 @@ class CoursesController extends Controller
      */
     public function destroy($id)
     {
-        $course = coursesInfo::find($id);
-        $course->delete();
-
+        $courseModel= new coursesInfo();
+        $course=$courseModel->del($id);
         return redirect('/course')->with('success', 'course deleted!');
     }
 }

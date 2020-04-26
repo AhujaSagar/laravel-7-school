@@ -14,7 +14,8 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        $school= schoolInfo::paginate(1);
+        $schoolModel= new schoolInfo();
+        $school=$schoolModel->show();
         return view('school.index',compact('school'));
     }
 
@@ -44,16 +45,15 @@ class SchoolController extends Controller
             'trustee'=>'required'
         ]);
 
-        $school = new schoolInfo([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'number' => $request->get('number'),
-            'location' => $request->get('location'),
-            'trustee' => $request->get('trustee')
-        ]);
-        $school->save();
-        return redirect('/school')->with('success', 'School added!');
- 
+            $name = $request->get('name');
+            $email = $request->get('email');
+            $number = $request->get('number');
+            $location = $request->get('location');
+            $trustee = $request->get('trustee');
+
+            $school= new schoolInfo();
+            $school->addSchool($name,$email,$number,$location,$trustee);
+            return redirect('/school')->with('success', 'School added!');     
     }
 
     /**
@@ -64,7 +64,9 @@ class SchoolController extends Controller
      */
     public function show($id)
     {
-        //
+        $schoolModel= new schoolInfo();
+        $school=$schoolModel->display($id);
+        return view('school.show', compact('school'));
     }
 
     /**
@@ -75,7 +77,8 @@ class SchoolController extends Controller
      */
     public function edit($id)
     {
-        $school = schoolInfo::find($id);
+        $schoolModel= new schoolInfo();
+        $school=$schoolModel->change($id);
         return view('school.edit', compact('school'));
     }
 
@@ -88,35 +91,9 @@ class SchoolController extends Controller
      */
     public function update(Request $request, $id)
     {
-       $request->validate([
-
-        ]);
-        $i=0;
-        $school = schoolInfo::find($id);
-        if($request->get('name')!=""){
-        $school->name = $request->get('name');
-        $i++;
-        }
-        if($request->get('email')!=""){
-        $school->email = $request->get('email');
-        $i++;
-        }
-        if($request->get('number')!=""){
-        $school->number = $request->get('number');
-        $i++;
-        }
-        if($request->get('location')!=""){
-        $school->location = $request->get('location');
-        $i++;
-        }
-        if($request->get('trustee')!=""){
-        $school->trustee = $request->get('trustee');
-        $i++;
-        }
-        $school->save();
-
-        return redirect('/school')->with('success', strval($i).' values updated!');
-   
+        $schoolModel= new schoolInfo();
+        $school=$schoolModel->upgrade($request, $id);
+        return redirect('/school')->with('success', 'School updated!');
     }
 
     /**
@@ -127,9 +104,8 @@ class SchoolController extends Controller
      */
     public function destroy($id)
     {
-        $school = schoolInfo::find($id);
-        $school->delete();
-
+        $schoolModel= new schoolInfo();
+        $school=$schoolModel->del($id);
         return redirect('/school')->with('success', 'School deleted!');
     }
 }
