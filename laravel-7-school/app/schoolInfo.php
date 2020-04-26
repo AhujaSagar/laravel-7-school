@@ -1,0 +1,18 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class schoolInfo extends Model
+{
+    public $timestamps = false;
+    protected $fillable = [
+        'id',
+        'name',
+        'number',
+        'email',
+        'location',
+        'trustee'
+    ];
+}
